@@ -1,0 +1,39 @@
+---
+ - name: Configuring the Tomcat
+   become: true
+   hosts: webservers
+   tasks:
+    - name: Installing the java
+      apt: name=default-jdk state=present  
+    - name: Install the wget
+      apt: name=wget state=present
+    - name: Download the tar file
+      get_url:
+        url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz
+        dest: /opt/
+    - name: untar the file
+      unarchive:
+        src: /opt/apache-tomcat-7.0.109.tar.gz
+        dest: /opt/  
+        remote_src: yes        
+    - name: Creating the Tomcat user
+      user: 
+        name: tomcat
+        create_home: yes
+        home: /home/tomcat
+          #group: tomcat
+    - name: changing the owner permissions
+      file:
+        path: /opt/apache-tomcat-7.0.109
+        owner: tomcat
+        group: tomcat
+        mode: 755
+              
+    - name: changing the tomcat-users file
+      template: src=/home/ansible/tomcat-users.xml.j2 dest=/opt/apache-tomcat-7.0.109/conf/tomcat-users.xml
+    - name: changing the context file
+      template: src=/home/ansible/context.xml.j2 dest=/opt/apache-tomcat-7.0.109/webapps/manager/META-INF/context.xml 
+          
+
+    - name: start the service
+      command: /opt/apache-tomcat-7.0.109/bin/startup.sh

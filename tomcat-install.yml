@@ -1,0 +1,9 @@
+---
+- name: Install the tomcat 
+  hosts: webservers
+  become: true  
+  tasks:
+   - name: Install the JAVA
+     apt: name=default-jdk state=present
+   - name: Install Wget
+     apt: name=wget state=present    

@@ -1,0 +1,6 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+   - name: creating the file
+     file: path=sample.txt state=touch  

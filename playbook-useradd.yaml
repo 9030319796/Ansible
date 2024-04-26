@@ -1,0 +1,13 @@
+---
+- name: Creating the user
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Adding the user
+      ansible.builtin.user:
+        name: sample
+        state: absent  
+          #shell: /bin/bash  
+          #become_method: sudo
+          #become: yes
+
