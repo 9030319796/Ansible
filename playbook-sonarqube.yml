@@ -1,0 +1,24 @@
+---
+ - name: Setup the Sonarqube
+   hosts: webservers
+   become: true
+   tasks:
+    - name: Install the JAVA
+      apt: name=default-jdk state=present
+    - name: Install the Wget    
+      apt: name=wget state=present
+    - name: Install the zip
+      apt: name=zip state=present    
+    - name: Download the zip file
+      get_url:
+        url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.9.10.61524.zip
+        dest: /opt/    
+    - name: unzip the file
+      unarchive:
+        src: /opt/sonarqube-8.9.10.61524.zip
+        dest: /opt/
+        remote_src: yes     
+    - name: Start the service
+      command: /opt/sonarqube-8.9.10.61524/bin/linux-x86-64/sonar.sh start
+        
+
